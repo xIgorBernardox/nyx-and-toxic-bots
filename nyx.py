@@ -1,3 +1,4 @@
+import os
 import time
 import requests
 import sqlite3
@@ -9,8 +10,8 @@ import threading
 
 # Webhooks do Discord
 WEBHOOKS = {
-    "leaks": "https://discord.com/api/webhooks/1428455650995736688/I1ObgTZvah7ulSpeqEO-FjqWZLMlr9K4dh5wh0nhGzqmdSd0VCDFr6GzL7VQB7nPEtxS",  # para leaks
-    "memes": "https://discord.com/api/webhooks/1428460902587437097/C__BTiES36HAQCn4v7vIlZ9mAw-LJwtIwX4rUwKeUEH4GzRtMzQriMW1vd366taP_CsZ"   # para memes
+    "leaks": os.environ["WEBHOOK_LEAKS"],
+    "memes": os.environ["WEBHOOK_MEMES"]
 }
 
 # Subreddits e qual webhook eles usam
@@ -23,9 +24,9 @@ SUBREDDITS = {
 }
 
 # Credenciais do Reddit
-REDDIT_CLIENT_ID = "_bWQLuzphmwo1CAP5RYo8A"
-REDDIT_CLIENT_SECRET = "lnyCR7wf04qqtFIGRLcZJUsI7mQRXw"
-REDDIT_USER_AGENT = "reddit-discord-bot by u/Fluffy-Objective-179"
+REDDIT_CLIENT_ID = os.environ["REDDIT_CLIENT_ID"]
+REDDIT_CLIENT_SECRET = os.environ["REDDIT_CLIENT_SECRET"]
+REDDIT_USER_AGENT = os.environ["REDDIT_USER_AGENT"]
 
 # ==============================
 
