@@ -30,11 +30,35 @@ REDDIT_USER_AGENT = os.environ["REDDIT_USER_AGENT"]
 
 # ==============================
 
-# Banco de dados para evitar posts duplicados
-DB = "sent_posts.db"
-conn = sqlite3.connect(DB)
-conn.execute("CREATE TABLE IF NOT EXISTS sent (id TEXT PRIMARY KEY)")
-conn.commit()
+def monitor_subreddit(subreddit_name, webhook_url):
+    # Cria conexão SQLite própria para esta thread
+    conn = sqlite3.connect("sent_posts.db")
+    conn.execute("CREATE TABLE IF NOT EXISTS sent (id TEXT PRIMARY KEY)")
+    conn.commit()
+
+    subreddit = reddit.subreddit(subreddit_name)
+    print(f"Monitorando r/{subreddit_name}...")
+
+    for submission in subreddit.stream.submissions(skip_existing=True):
+        post_id = submission.id
+
+        # Checa se já enviou
+        cur = conn.execute("SELECT 1 FROM sent WHERE id=?", (post_id,))
+        if cur.fetchone():
+            continue
+
+        title = submission.title
+        url = "https://reddit.com" + submission.permalink
+        author = submission.author.name if submission.author else "[deleted]"
+        print(f"Novo post em r/{subreddit_name}: {title}")
+
+        post_to_discord(webhook_url, title, url, author, subreddit_name)
+
+        # Marca como enviado
+        conn.execute("INSERT OR IGNORE INTO sent(id) VALUES(?)", (post_id,))
+        conn.commit()
+
+    conn.close()
 
 # Inicializa o Reddit
 reddit = praw.Reddit(
