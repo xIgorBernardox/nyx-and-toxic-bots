@@ -26,6 +26,8 @@ SUBREDDITS = {
 }
 
 # Credenciais do Reddit
+REDDIT_USERNAME = os.environ["REDDIT_USERNAME"]
+REDDIT_PASSWORD = os.environ["REDDIT_PASSWORD"]
 REDDIT_CLIENT_ID = os.environ["REDDIT_CLIENT_ID"]
 REDDIT_CLIENT_SECRET = os.environ["REDDIT_CLIENT_SECRET"]
 REDDIT_USER_AGENT = os.environ["REDDIT_USER_AGENT"]
@@ -76,6 +78,8 @@ def monitor_subreddit(subreddit_name, webhook_url):
 
 # Inicializa o Reddit
 reddit = praw.Reddit(
+    username=REDDIT_USERNAME,
+    password=REDDIT_PASSWORD,
     client_id=REDDIT_CLIENT_ID,
     client_secret=REDDIT_CLIENT_SECRET,
     user_agent=REDDIT_USER_AGENT
