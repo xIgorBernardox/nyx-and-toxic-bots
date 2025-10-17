@@ -5,7 +5,6 @@ import sqlite3
 import traceback
 import praw
 import threading
-import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # ======== CONFIGURAÇÃO ========
@@ -39,6 +38,10 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
         self.wfile.write(b"Bot rodando!")
+        
+    def do_HEAD(self):
+        self.send_response(200)
+        self.end_headers()
 
 def run_server():
     server = HTTPServer(("0.0.0.0", 10000), Handler)
